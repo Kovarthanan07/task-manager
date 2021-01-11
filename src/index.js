@@ -32,6 +32,50 @@ app.post("/tasks", (req, res) => {
     });
 });
 
+app.get("/users", (req, res) => {
+  User.find({})
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((error) => {});
+});
+
+app.get("/users/:id", (req, res) => {
+  const _id = req.params.id;
+  User.findById(_id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.status(200).send(user);
+    })
+    .catch((error) => {
+      res.status(500).send();
+    });
+});
+
+app.get("/tasks", (req, res) => {
+  Task.find({})
+    .then((tasks) => {
+      res.send(tasks);
+    })
+    .catch((error) => {});
+});
+
+app.get("/tasks/:id", (req, res) => {
+  const _id = req.params.id;
+  Task.findById(_id)
+    .then((task) => {
+      if (!task) {
+        return res.status(404).send();
+      }
+      res.status(200).send(task);
+    })
+    .catch((error) => {
+      res.status(500).send();
+    });
+});
+
 app.listen(port, () => {
   console.log("Server successfully running on :", port);
 });
