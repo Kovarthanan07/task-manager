@@ -2,6 +2,11 @@ const express = require("express");
 const User = require("../models/user");
 const auth = require("../middleware/auth");
 const router = new express.Router();
+const multer = require("multer");
+
+const upload = multer({
+  dest: "avatar",
+});
 
 router.post("/users", async (req, res) => {
   const user = new User(req.body);
@@ -13,6 +18,10 @@ router.post("/users", async (req, res) => {
   } catch (e) {
     res.status(400).send(e);
   }
+});
+
+router.post("/users/me/avatar", upload.single("avatar"), async (req, res) => {
+  res.send();
 });
 
 router.post("/users/login", async (req, res) => {
@@ -69,7 +78,6 @@ router.patch("/users/me", auth, async (req, res) => {
   try {
     updates.forEach((update) => (req.user[update] = req.body[update]));
     await req.user.save();
-
     res.send(req.user);
   } catch (e) {
     res.status(400).send(e);
